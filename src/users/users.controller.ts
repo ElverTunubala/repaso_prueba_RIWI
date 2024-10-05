@@ -4,7 +4,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthGuard } from 'src/auth/guards/jwt-auth.guards';
 import { RolesGuard } from 'src/auth/guards/roles.guards';
-import { Roles } from 'src/common/decorators/roles.decorator';
+import { Roles } from 'src/common/decorators/roles.decorators';
 
 @Controller('users')
 @UseGuards(AuthGuard, RolesGuard)//verifica si hay token en todo el crud
@@ -24,7 +24,7 @@ export class UsersController {
   @Roles('admin', 'user')
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+    return this.userService.findOne(id);
   }
   @Roles('admin')
   @Patch(':id')
@@ -32,11 +32,11 @@ export class UsersController {
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
   ) {
-    return this.userService.update(+id, updateUserDto);
+    return this.userService.update(id, updateUserDto);
   }
   @Roles('admin')
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+    return this.userService.remove(id);
   }
 }

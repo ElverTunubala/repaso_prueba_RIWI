@@ -4,7 +4,6 @@ import { ROLES_KEY } from '../../common/decorators/roles.decorators';
 import { AuthHelperService } from './authHelperService';
 import { Request } from 'express';
 
-
 @Injectable()
 export class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector, private authHelper: AuthHelperService) {}
@@ -20,8 +19,7 @@ export class RolesGuard implements CanActivate {
     }
     const request = context.switchToHttp().getRequest<Request>();
     const payload = await this.authHelper.validateToken(request);
-    const userRole = payload.rol; // devuelve user o admin
-    
+    const userRole = payload.role; // devuelve user o admin
 
     if (!roles.includes(userRole)) {
       throw new ForbiddenException('You do not have permission to access this resource');

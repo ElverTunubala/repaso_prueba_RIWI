@@ -37,7 +37,7 @@ export class AuthService {
 
     await this.userRepository.save(user);
 
-    return { user }; // Devuelve el usuario creado (puedes ajustar según sea necesario)
+    return { user }; // Devuelve el usuario creado 
   }
 
   async login(userObjectLogin: LoginAuthDto) {
