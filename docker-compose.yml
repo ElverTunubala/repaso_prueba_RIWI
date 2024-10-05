@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:latest
+    restart: always
+    container_name: postgres_db
+    environment:
+      POSTGRES_DB: docker_database       # Replace with your database name
+      POSTGRES_USER: elver               # Replace with your username
+      POSTGRES_PASSWORD: riwi123     # Replace with your password
+    ports:
+      - "5432:5432"                 
+    
+  
+
