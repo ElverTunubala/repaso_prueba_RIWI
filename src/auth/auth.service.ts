@@ -6,7 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { LoginAuthDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { UserEntity } from '../users/entities/user.entity';
-import { Role } from 'src/roles/roles.enum'; 
+import { Role } from 'src/roles/roles.enum';
 
 @Injectable()
 export class AuthService {
@@ -50,7 +50,7 @@ export class AuthService {
 
     if (!checkPassword) throw new HttpException('PASSWORD INCORRECT', 403);
 
-    const payload = { id: findUser.id, email: findUser.email, role: findUser.role }; // Usa el rol directamente
+    const payload = { id: findUser.id, email: findUser.email, role: findUser.role }; // aqui mando el rol en el token
     const token = this.jwtService.sign(payload);
     const data = {
       token,

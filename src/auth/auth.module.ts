@@ -4,12 +4,10 @@ import { AuthController } from './auth.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { JwtModule } from '@nestjs/jwt';
-import { jwtConstants } from './jwtServices/jwt.constants';
-import { JwtAuthService } from './jwtServices/jwt.service';
-import { AuthGuard } from './guards/jwt-auth.guards';
-import { AuthHelperService } from './guards/authHelperService';
+import { JwtAuthGuard } from './guards/jwt-auth.guards';
 import { RolesGuard } from './guards/roles.guards';
 import { ConfigModule } from '@nestjs/config';
+import { JwtStrategy } from './jwtServices/jwt.strategy';
 
 @Global()
 @Module({
@@ -18,11 +16,11 @@ import { ConfigModule } from '@nestjs/config';
     TypeOrmModule.forFeature([UserEntity]),
     JwtModule.register({
       secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '5m' },
+      signOptions: { expiresIn: '10m' },
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtAuthService, AuthGuard, AuthHelperService, RolesGuard, AuthHelperService],
-  exports: [AuthHelperService]
+  providers: [AuthService, JwtAuthGuard,RolesGuard, JwtStrategy],
+  exports: [JwtStrategy]
 })
 export class AuthModule {}

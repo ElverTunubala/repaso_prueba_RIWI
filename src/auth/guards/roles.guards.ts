@@ -1,12 +1,12 @@
 import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { ROLES_KEY } from '../../common/decorators/roles.decorators';
-import { AuthHelperService } from './authHelperService';
 import { Request } from 'express';
+import { UserEntity } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
-  constructor(private reflector: Reflector, private authHelper: AuthHelperService) {}
+  constructor(private reflector: Reflector) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const roles = this.reflector.getAllAndOverride<string[]>(ROLES_KEY, [
@@ -15,12 +15,16 @@ export class RolesGuard implements CanActivate {
     ]);
 
     if (!roles) {
-      return true; 
+      return true;
     }
     const request = context.switchToHttp().getRequest<Request>();
-    const payload = await this.authHelper.validateToken(request);
-    const userRole = payload.role; // devuelve user o admin
-
+    const user = request.user as UserEntity;
+    
+    if (!user) {
+      throw new ForbiddenException('User not found');
+    }
+    const userRole = user.role; // Ahora puedes acceder al rol del usuario
+   
     if (!roles.includes(userRole)) {
       throw new ForbiddenException('You do not have permission to access this resource');
     }
