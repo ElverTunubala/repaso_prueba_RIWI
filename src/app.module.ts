@@ -3,6 +3,9 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
+import { ProductsModule } from './products/products.module';
+import { TransactionsDetailsModule } from './transactions-details/transactions-details.module';
+import { StripeModule } from './stripe/stripe.module';
 
 @Module({
   imports: [
@@ -21,7 +24,10 @@ import { UsersModule } from './users/users.module';
       ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false
     }),
     AuthModule,
-    UsersModule],
+    UsersModule,
+    ProductsModule,
+    TransactionsDetailsModule,
+    StripeModule],
   controllers: [],
   providers: [],
 })
