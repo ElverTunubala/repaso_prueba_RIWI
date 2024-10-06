@@ -4,7 +4,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './entities/user.entity';
 import { Repository } from 'typeorm';
-import { Role } from 'src/roles/roles.enum'; // Importa el enum
+import { Role } from '../roles/roles.enum';
 
 @Injectable()
 export class UsersService {
@@ -22,7 +22,11 @@ export class UsersService {
       const newUser = this.userRepository.create({ ...createUserDto });
       return await this.userRepository.save(newUser);
     } catch (error) {
-      throw new InternalServerErrorException('Error creating user', error.message);
+      if (error instanceof NotFoundException) {
+        throw error; // Lanza la excepción de rol no encontrado
+     }
+    throw new InternalServerErrorException('Error creating user', error.message);
+      
     }
   }
 
@@ -42,6 +46,9 @@ export class UsersService {
       }
       return user;
     } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
       throw new InternalServerErrorException('Error finding user', error.message);
     }
   }
@@ -60,6 +67,9 @@ export class UsersService {
 
       return await this.userRepository.save(user);
     } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
       throw new InternalServerErrorException('Error updating user', error.message);
     }
   }
